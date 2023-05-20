@@ -33,7 +33,29 @@ async function run() {
 
     app.get("/all-toys", async (req, res) => {
       const result = await toysInfoCollections.find().toArray();
-      res.send(result);
+
+      const formattedResult = result.map(
+        ({
+          _id,
+          name,
+          seller_name,
+          subcategory,
+          price,
+          available_quantity,
+          picture,
+        }) => ({
+          _id,
+          name,
+          seller_name,
+          subcategory,
+          price,
+          available_quantity,
+          picture,
+        })
+      );
+      res.send(formattedResult);
+
+      // res.send(result);
     });
 
     app.get("/toy-details/:id", async (req, res) => {
