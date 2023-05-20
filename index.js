@@ -43,6 +43,8 @@ async function run() {
           price,
           available_quantity,
           picture,
+          release_date,
+          brand,
         }) => ({
           _id,
           name,
@@ -51,6 +53,8 @@ async function run() {
           price,
           available_quantity,
           picture,
+          release_date,
+          brand,
         })
       );
       res.send(formattedResult);
@@ -58,6 +62,12 @@ async function run() {
       // res.send(result);
     });
 
+    app.post("/all-toys", async (req, res) => {
+      const toyDetails = req.body;
+      console.log(toyDetails);
+      const result = await toysInfoCollections.insertOne(toyDetails);
+      res.send(result);
+    });
     app.get("/toy-details/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
