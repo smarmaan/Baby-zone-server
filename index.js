@@ -33,33 +33,7 @@ async function run() {
 
     app.get("/all-toys", async (req, res) => {
       const result = await toysInfoCollections.find().limit(20).toArray();
-
-      const formattedResult = result.map(
-        ({
-          _id,
-          name,
-          seller_name,
-          subcategory,
-          price,
-          available_quantity,
-          picture,
-          release_date,
-          brand,
-        }) => ({
-          _id,
-          name,
-          seller_name,
-          subcategory,
-          price,
-          available_quantity,
-          picture,
-          release_date,
-          brand,
-        })
-      );
-      res.send(formattedResult);
-
-      // res.send(result);
+      res.send(result);
     });
 
     app.post("/all-toys", async (req, res) => {
@@ -68,6 +42,25 @@ async function run() {
       const result = await toysInfoCollections.insertOne(toyDetails);
       res.send(result);
     });
+
+    app.get("/my-toys", async (req, res) => {
+      console.log(req.query.email);
+      let query = {};
+
+      if (req.query?.email) {
+        query = { seller_email: req.query.email };
+      }
+      const result = await toysInfoCollections.find(query).toArray();
+      res.send(result);
+    });
+
+    app.delete("/my-toys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await toysInfoCollections.deleteOne(query);
+      res.send(result);
+    });
+
     app.get("/toy-details/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
