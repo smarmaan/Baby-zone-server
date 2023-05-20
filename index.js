@@ -32,7 +32,7 @@ async function run() {
     const toysInfoCollections = client.db("babyZone").collection("toysInfo");
 
     app.get("/all-toys", async (req, res) => {
-      const result = await toysInfoCollections.find().toArray();
+      const result = await toysInfoCollections.find().limit(20).toArray();
 
       const formattedResult = result.map(
         ({
