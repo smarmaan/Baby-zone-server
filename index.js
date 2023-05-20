@@ -61,6 +61,33 @@ async function run() {
       res.send(result);
     });
 
+    app.patch("/my-toys/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: new ObjectId(id) };
+
+      const updatedToyInfo = req.body;
+
+      console.log(updatedToyInfo);
+
+      const updateToy = {
+        $set: {
+          name: updatedToyInfo.name, //
+          seller_name: updatedToyInfo.seller_name, //
+          seller_email: updatedToyInfo.seller_email, //
+          price: updatedToyInfo.price, //
+          available_quantity: updatedToyInfo.available_quantity, //
+          picture: updatedToyInfo.picture, //
+          brand: updatedToyInfo.brand, //
+          rating: updatedToyInfo.rating, //
+          description: updatedToyInfo.description, //
+        },
+      };
+
+      const result = await toysInfoCollections.updateOne(query, updateToy);
+      res.send(result);
+    });
+
     app.get("/toy-details/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
