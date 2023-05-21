@@ -50,7 +50,18 @@ async function run() {
       if (req.query?.email) {
         query = { seller_email: req.query.email };
       }
-      const result = await toysInfoCollections.find(query).toArray();
+
+      const sortOptions = {};
+      if (req.query?.sort === "asc") {
+        sortOptions.price = 1; // Sort in ascending order
+      } else if (req.query?.sort === "dsc") {
+        sortOptions.price = -1; // Sort in descending order
+      }
+
+      const result = await toysInfoCollections
+        .find(query)
+        .sort(sortOptions)
+        .toArray();
       res.send(result);
     });
 
@@ -72,15 +83,15 @@ async function run() {
 
       const updateToy = {
         $set: {
-          name: updatedToyInfo.name, //
-          seller_name: updatedToyInfo.seller_name, //
-          seller_email: updatedToyInfo.seller_email, //
-          price: updatedToyInfo.price, //
-          available_quantity: updatedToyInfo.available_quantity, //
-          picture: updatedToyInfo.picture, //
-          brand: updatedToyInfo.brand, //
-          rating: updatedToyInfo.rating, //
-          description: updatedToyInfo.description, //
+          name: updatedToyInfo.name,
+          seller_name: updatedToyInfo.seller_name,
+          seller_email: updatedToyInfo.seller_email,
+          price: updatedToyInfo.price,
+          available_quantity: updatedToyInfo.available_quantity,
+          picture: updatedToyInfo.picture,
+          brand: updatedToyInfo.brand,
+          rating: updatedToyInfo.rating,
+          description: updatedToyInfo.description,
         },
       };
 
