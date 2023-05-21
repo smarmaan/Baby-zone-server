@@ -31,6 +31,34 @@ async function run() {
 
     const toysInfoCollections = client.db("babyZone").collection("toysInfo");
 
+    const indexKeys = { name: 1, brand: 1 };
+
+    const indexOptions = { name: "brandName" };
+
+    const result = await toysInfoCollections.createIndex(
+      indexKeys,
+      indexOptions
+    );
+
+    app.get("/search-by/:text", async (req, res) => {
+      const searchBy = req.params.text;
+
+      const result = await toysInfoCollections
+        .find({
+          $or: [
+            {
+              name: { $regex: searchBy, $options: "i" },
+            },
+            {
+              brand: { $regex: searchBy, $options: "i" },
+            },
+          ],
+        })
+        .toArray();
+
+      res.send(result);
+    });
+
     app.get("/all-toys", async (req, res) => {
       const result = await toysInfoCollections.find().limit(20).toArray();
       res.send(result);
